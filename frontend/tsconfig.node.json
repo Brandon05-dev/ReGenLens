@@ -4,7 +4,17 @@
     "skipLibCheck": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "allowJs": true,
+    "strict": false,
+    "noEmit": true
   },
-  "include": ["vite.config.js"]
+  "include": [
+    "vite.config.js",
+    "postcss.config.js", 
+    "tailwind.config.js",
+    "*.config.js",
+    "*.config.ts"
+  ]
 }

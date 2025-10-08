@@ -1,0 +1,113 @@
+{
+  "demoUser": {
+    "id": "demo-user-123",
+    "email": "demo@regenlens.com",
+    "firstName": "Demo",
+    "lastName": "User",
+    "organization": "ReGenLens Demo",
+    "isDemo": true
+  },
+  "sampleAnalyses": [
+    {
+      "id": "demo-1",
+      "region": "Central Valley Agriculture",
+      "coordinates": { "lat": 36.7783, "lng": -119.4179 },
+      "ndviTrend": [0.82, 0.78, 0.74, 0.69, 0.65, 0.61],
+      "degradationScore": 0.35,
+      "aiSummary": "[DEMO] This agricultural region shows moderate vegetation decline over the past 3 years. Primary factors include drought stress and soil degradation. Recommended interventions: 1) Implement precision irrigation systems, 2) Apply regenerative farming practices like cover cropping, 3) Establish windbreaks to reduce soil erosion.",
+      "createdAt": "2024-01-15T10:30:00Z",
+      "recommendations": [
+        {
+          "priority": "High",
+          "action": "Install drip irrigation system",
+          "impact": "25% water savings, improved crop yield",
+          "timeframe": "3-6 months"
+        },
+        {
+          "priority": "Medium",
+          "action": "Plant cover crops",
+          "impact": "Soil health improvement, erosion reduction",
+          "timeframe": "6-12 months"
+        }
+      ]
+    },
+    {
+      "id": "demo-2",
+      "region": "Northern Forest Reserve",
+      "coordinates": { "lat": 47.0527, "lng": -101.0659 },
+      "ndviTrend": [0.91, 0.89, 0.87, 0.84, 0.82, 0.79],
+      "degradationScore": 0.22,
+      "aiSummary": "[DEMO] Forest health is generally good with minor decline due to beetle infestation and climate stress. The area maintains strong canopy cover. Recommended actions: 1) Monitor for pest outbreaks, 2) Create firebreaks for wildfire prevention, 3) Plant climate-resilient native species in affected areas.",
+      "createdAt": "2024-01-12T14:15:00Z",
+      "recommendations": [
+        {
+          "priority": "Medium",
+          "action": "Pest monitoring program",
+          "impact": "Early detection and prevention",
+          "timeframe": "Ongoing"
+        },
+        {
+          "priority": "Low",
+          "action": "Diversify tree species",
+          "impact": "Increased climate resilience",
+          "timeframe": "2-5 years"
+        }
+      ]
+    },
+    {
+      "id": "demo-3",
+      "region": "Coastal Wetland Restoration",
+      "coordinates": { "lat": 31.3069, "lng": -84.1557 },
+      "ndviTrend": [0.45, 0.52, 0.58, 0.64, 0.71, 0.78],
+      "degradationScore": 0.15,
+      "aiSummary": "[DEMO] Excellent restoration progress! Vegetation recovery is ahead of schedule with 73% improvement in NDVI values. Native plant establishment is successful. Continue current management: 1) Maintain water level management, 2) Control invasive species, 3) Monitor wildlife habitat development.",
+      "createdAt": "2024-01-10T09:45:00Z",
+      "recommendations": [
+        {
+          "priority": "Low",
+          "action": "Continue water management",
+          "impact": "Sustained ecosystem health",
+          "timeframe": "Ongoing"
+        },
+        {
+          "priority": "Medium",
+          "action": "Invasive species control",
+          "impact": "Protect native biodiversity",
+          "timeframe": "Seasonal"
+        }
+      ]
+    }
+  ],
+  "regionData": [
+    {
+      "name": "Central Valley Agriculture",
+      "coordinates": { "lat": 36.7783, "lng": -119.4179 },
+      "type": "Agricultural",
+      "status": "At Risk"
+    },
+    {
+      "name": "Northern Forest Reserve",
+      "coordinates": { "lat": 47.0527, "lng": -101.0659 },
+      "type": "Forest",
+      "status": "Stable"
+    },
+    {
+      "name": "Coastal Wetland Restoration",
+      "coordinates": { "lat": 31.3069, "lng": -84.1557 },
+      "type": "Wetland",
+      "status": "Improving"
+    },
+    {
+      "name": "Desert Rehabilitation Zone",
+      "coordinates": { "lat": 33.4484, "lng": -112.0740 },
+      "type": "Desert",
+      "status": "Critical"
+    },
+    {
+      "name": "Prairie Grassland Conservation",
+      "coordinates": { "lat": 39.7391, "lng": -104.9847 },
+      "type": "Grassland",
+      "status": "Stable"
+    }
+  ]
+}

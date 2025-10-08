@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Download, MapPin, Calendar, TrendingDown, AlertTriangle, CheckCircle } from 'lucide-react';
 import NDVIChart from './NDVIChart';
 
-const InsightsPanel = ({ analysisData, selectedRegion, loading, error, onClearSelection }) => {
+const InsightsPanel = ({ analysisData, selectedRegion, loading, error, onClearSelection, isDemo = false, isDashboard = false }) => {
   
   const handleDownloadReport = () => {
     if (!analysisData) return;
@@ -43,8 +43,13 @@ const InsightsPanel = ({ analysisData, selectedRegion, loading, error, onClearSe
         <div className="p-6 border-b border-gray-200">
           <h2 className="text-xl font-bold text-forest-700">Analysis Panel</h2>
           <p className="text-sm text-gray-600 mt-1">
-            Select a region on the map to begin analysis
+            {isDemo ? 'Try our demo - Select a region to see sample analysis' : 'Select a region on the map to begin analysis'}
           </p>
+          {isDemo && (
+            <div className="mt-2 bg-earth-100 text-earth-800 px-3 py-2 rounded-lg text-xs">
+              🧪 Demo Mode - Sample data only
+            </div>
+          )}
         </div>
 
         {/* Empty State */}
@@ -77,7 +82,9 @@ const InsightsPanel = ({ analysisData, selectedRegion, loading, error, onClearSe
       {/* Header */}
       <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-forest-50 to-earth-50">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-forest-700">Regional Analysis</h2>
+          <h2 className="text-lg font-bold text-forest-700">
+            {isDemo ? 'Demo Analysis' : 'Regional Analysis'}
+          </h2>
           {selectedRegion && (
             <button
               onClick={onClearSelection}
@@ -92,6 +99,11 @@ const InsightsPanel = ({ analysisData, selectedRegion, loading, error, onClearSe
           <div className="mt-2 flex items-center space-x-2 text-sm text-gray-600">
             <MapPin size={14} />
             <span className="font-medium">{selectedRegion.name}</span>
+            {isDemo && (
+              <span className="bg-earth-200 text-earth-800 px-2 py-1 rounded-full text-xs font-medium">
+                Demo
+              </span>
+            )}
           </div>
         )}
       </div>

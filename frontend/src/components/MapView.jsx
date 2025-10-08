@@ -12,49 +12,65 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// East Africa bounds for constraining the map and search
-const EAST_AFRICA_BOUNDS = [
-  [-12, 28], // Southwest coordinates (lat, lng)
-  [18, 52]   // Northeast coordinates (lat, lng)
+// Africa bounds for constraining the map and search
+const AFRICA_BOUNDS = [
+  [-35, -20], // Southwest coordinates (lat, lng)
+  [38, 52]    // Northeast coordinates (lat, lng)
 ];
 
-// East Africa center coordinates
-const EAST_AFRICA_CENTER = [0.0236, 37.9062]; // Approximate center of East Africa
+// Africa center coordinates
+const AFRICA_CENTER = [0.0, 20.0]; // Approximate center of Africa
 
-// Simple East Africa outline for visual context
-const EAST_AFRICA_OUTLINE = {
+// Simple Africa outline for visual context
+const AFRICA_OUTLINE = {
   "type": "FeatureCollection",
   "features": [
     {
       "type": "Feature",
       "properties": {
-        "name": "East Africa Region"
+        "name": "Africa Continent"
       },
       "geometry": {
         "type": "Polygon",
         "coordinates": [[
-          [28, 18],    // Northwest
-          [52, 18],    // Northeast  
-          [52, -12],   // Southeast
-          [28, -12],   // Southwest
-          [28, 18]     // Close polygon
+          [-20, 38],   // Northwest
+          [52, 38],    // Northeast  
+          [52, -35],   // Southeast
+          [-20, -35],  // Southwest
+          [-20, 38]    // Close polygon
         ]]
       }
     }
   ]
 };
 
-// Popular search suggestions for East Africa
+// Popular search suggestions for Africa
 const SEARCH_SUGGESTIONS = [
-  'Nairobi, Kenya', 'Dar es Salaam, Tanzania', 'Kampala, Uganda', 'Addis Ababa, Ethiopia',
-  'Kigali, Rwanda', 'Arusha, Tanzania', 'Mombasa, Kenya', 'Dodoma, Tanzania',
-  'Kisumu, Kenya', 'Mwanza, Tanzania', 'Jinja, Uganda', 'Bahir Dar, Ethiopia'
+  'Lagos, Nigeria', 'Cairo, Egypt', 'Kinshasa, DR Congo', 'Johannesburg, South Africa',
+  'Nairobi, Kenya', 'Casablanca, Morocco', 'Addis Ababa, Ethiopia', 'Dar es Salaam, Tanzania',
+  'Cape Town, South Africa', 'Accra, Ghana', 'Algiers, Algeria', 'Kampala, Uganda'
 ];
 
-// Sample regions with known degradation issues in East Africa
+// Sample regions with known degradation issues across Africa
 const SAMPLE_REGIONS = [
   {
     id: 1,
+    name: "Sahel Region, Mali",
+    coordinates: { lat: 16.0, lng: -2.0 },
+    country: "Mali",
+    degradationLevel: "severe",
+    description: "Semi-arid region experiencing desertification and soil erosion"
+  },
+  {
+    id: 2,
+    name: "Northern Cape, South Africa",
+    coordinates: { lat: -29.0, lng: 21.0 },
+    country: "South Africa",
+    degradationLevel: "high",
+    description: "Karoo region with overgrazing and drought impacts"
+  },
+  {
+    id: 3,
     name: "Machakos County, Kenya",
     coordinates: { lat: -1.5177, lng: 37.2634 },
     country: "Kenya",
@@ -62,23 +78,31 @@ const SAMPLE_REGIONS = [
     description: "Semi-arid region experiencing severe soil erosion"
   },
   {
-    id: 2,
-    name: "Dodoma Region, Tanzania",
-    coordinates: { lat: -6.1630, lng: 35.7516 },
-    country: "Tanzania",
-    degradationLevel: "moderate",
-    description: "Central plateau with seasonal drought impacts"
-  },
-  {
-    id: 3,
-    name: "Karamoja Region, Uganda",
-    coordinates: { lat: 2.6689, lng: 34.2975 },
-    country: "Uganda",
-    degradationLevel: "high",
-    description: "Semi-arid pastoralist region with overgrazing"
-  },
-  {
     id: 4,
+    name: "Upper East Region, Ghana",
+    coordinates: { lat: 10.9, lng: -0.9 },
+    country: "Ghana",
+    degradationLevel: "moderate",
+    description: "Savanna region with seasonal drought challenges"
+  },
+  {
+    id: 5,
+    name: "Maradi Region, Niger",
+    coordinates: { lat: 13.5, lng: 7.1 },
+    country: "Niger",
+    degradationLevel: "severe",
+    description: "Sahel region with extreme desertification"
+  },
+  {
+    id: 6,
+    name: "Kasai Region, DR Congo",
+    coordinates: { lat: -6.2, lng: 23.6 },
+    country: "DR Congo",
+    degradationLevel: "moderate",
+    description: "Deforestation and mining-related land degradation"
+  },
+  {
+    id: 7,
     name: "Afar Region, Ethiopia",
     coordinates: { lat: 11.7943, lng: 40.9819 },
     country: "Ethiopia",
@@ -86,28 +110,28 @@ const SAMPLE_REGIONS = [
     description: "Desert region with extreme degradation and salinity"
   },
   {
-    id: 5,
-    name: "Eastern Province, Rwanda",
-    coordinates: { lat: -2.0469, lng: 30.3167 },
-    country: "Rwanda",
+    id: 8,
+    name: "Karamoja Region, Uganda",
+    coordinates: { lat: 2.6689, lng: 34.2975 },
+    country: "Uganda",
+    degradationLevel: "high",
+    description: "Semi-arid pastoralist region with overgrazing"
+  },
+  {
+    id: 9,
+    name: "Middle Atlas, Morocco",
+    coordinates: { lat: 33.0, lng: -5.0 },
+    country: "Morocco",
     degradationLevel: "moderate",
-    description: "Hillside farming with erosion challenges"
+    description: "Mountain region with erosion from intensive agriculture"
   },
   {
-    id: 6,
-    name: "Northern Kenya",
-    coordinates: { lat: 3.5000, lng: 37.0000 },
-    country: "Kenya",
-    degradationLevel: "severe",
-    description: "Arid pastoralist lands with severe degradation"
-  },
-  {
-    id: 7,
-    name: "Somali Region, Ethiopia",
-    coordinates: { lat: 6.5000, lng: 44.0000 },
-    country: "Ethiopia",
-    degradationLevel: "severe",
-    description: "Pastoral region affected by drought and overgrazing"
+    id: 10,
+    name: "Ouaddaï Region, Chad",
+    coordinates: { lat: 14.0, lng: 21.0 },
+    country: "Chad",
+    degradationLevel: "high",
+    description: "Sahel transition zone with severe degradation"
   }
 ];
 
@@ -146,16 +170,16 @@ const createCustomIcon = (level) => {
 };
 
 // Component to handle map clicks
-function MapClickHandler({ onRegionSelect, loading, isWithinEastAfrica }) {
+function MapClickHandler({ onRegionSelect, loading, isWithinAfrica }) {
   useMapEvents({
     click: (e) => {
       if (loading) return;
       
       const { lat, lng } = e.latlng;
       
-      // Check if click is within East Africa bounds
-      if (!isWithinEastAfrica(lat, lng)) {
-        return; // Ignore clicks outside East Africa
+      // Check if click is within Africa bounds
+      if (!isWithinAfrica(lat, lng)) {
+        return; // Ignore clicks outside Africa
       }
       
       // Find closest sample region or create a generic one
@@ -164,17 +188,22 @@ function MapClickHandler({ onRegionSelect, loading, isWithinEastAfrica }) {
           Math.pow(region.coordinates.lat - lat, 2) + 
           Math.pow(region.coordinates.lng - lng, 2)
         );
-        return distance < 2; // Within ~2 degrees (smaller radius for East Africa)
+        return distance < 5; // Within ~5 degrees (larger radius for full Africa)
       });
 
       if (!selectedRegion) {
         // Determine likely country based on coordinates
-        let country = "East Africa";
+        let country = "Africa";
         if (lat >= -4.7 && lat <= 5.0 && lng >= 33.9 && lng <= 41.9) country = "Kenya";
         else if (lat >= -11.7 && lat <= -0.95 && lng >= 29.3 && lng <= 40.4) country = "Tanzania";
         else if (lat >= -1.5 && lat <= 4.2 && lng >= 29.6 && lng <= 35.0) country = "Uganda";
         else if (lat >= 3.4 && lat <= 14.9 && lng >= 32.9 && lng <= 47.8) country = "Ethiopia";
-        else if (lat >= -2.8 && lat <= -1.0 && lng >= 28.9 && lng <= 30.9) country = "Rwanda";
+        else if (lat >= 22.0 && lat <= 31.7 && lng >= -17.1 && lng <= 11.9) country = "Algeria";
+        else if (lat >= 30.0 && lat <= 31.7 && lng >= 24.7 && lng <= 36.9) country = "Egypt";
+        else if (lat >= -35.0 && lat <= -22.1 && lng >= 16.5 && lng <= 32.9) country = "South Africa";
+        else if (lat >= 4.0 && lat <= 13.9 && lng >= 2.2 && lng <= 14.6) country = "Nigeria";
+        else if (lat >= -26.9 && lat <= -9.4 && lng >= 11.7 && lng <= 29.4) country = "Angola";
+        else if (lat >= 31.0 && lat <= 37.5 && lng >= -13.2 && lng <= -1.0) country = "Morocco";
         
         selectedRegion = {
           id: Date.now(),
@@ -226,12 +255,12 @@ const MapView = ({ onRegionSelect, selectedRegion, loading }) => {
     return () => clearTimeout(timeoutId);
   }, [searchQuery]);
 
-  // Function to check if coordinates are within East Africa bounds
-  const isWithinEastAfrica = (lat, lng) => {
-    return lat >= EAST_AFRICA_BOUNDS[0][0] && 
-           lat <= EAST_AFRICA_BOUNDS[1][0] && 
-           lng >= EAST_AFRICA_BOUNDS[0][1] && 
-           lng <= EAST_AFRICA_BOUNDS[1][1];
+  // Function to check if coordinates are within Africa bounds
+  const isWithinAfrica = (lat, lng) => {
+    return lat >= AFRICA_BOUNDS[0][0] && 
+           lat <= AFRICA_BOUNDS[1][0] && 
+           lng >= AFRICA_BOUNDS[0][1] && 
+           lng <= AFRICA_BOUNDS[1][1];
   };
 
   // Search for locations using Nominatim API
@@ -243,20 +272,20 @@ const MapView = ({ onRegionSelect, selectedRegion, loading }) => {
         `q=${encodeURIComponent(query)}&` +
         `format=json&` +
         `limit=10&` +
-        `countrycodes=ke,tz,ug,et,rw,bi,so,dj,er,ss&` +
+        `countrycodes=dz,ao,bj,bw,bf,bi,cm,cv,cf,td,km,cg,cd,dj,eg,gq,er,sz,et,ga,gm,gh,gn,gw,ci,ke,ls,lr,ly,mg,mw,ml,mr,mu,ma,mz,na,ne,ng,rw,st,sn,sc,sl,so,za,ss,sd,tz,tg,tn,ug,zm,zw&` +
         `addressdetails=1&` +
         `bounded=1&` +
-        `viewbox=${EAST_AFRICA_BOUNDS[0][1]},${EAST_AFRICA_BOUNDS[1][0]},${EAST_AFRICA_BOUNDS[1][1]},${EAST_AFRICA_BOUNDS[0][0]}`
+        `viewbox=${AFRICA_BOUNDS[0][1]},${AFRICA_BOUNDS[1][0]},${AFRICA_BOUNDS[1][1]},${AFRICA_BOUNDS[0][0]}`
       );
       
       const data = await response.json();
       
-      // Filter results to East Africa region and format them
+      // Filter results to Africa region and format them
       const filteredResults = data
         .filter(result => {
           const lat = parseFloat(result.lat);
           const lng = parseFloat(result.lon);
-          return isWithinEastAfrica(lat, lng);
+          return isWithinAfrica(lat, lng);
         })
         .map(result => ({
           id: result.place_id,
@@ -344,7 +373,7 @@ const MapView = ({ onRegionSelect, selectedRegion, loading }) => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Search cities, regions, or coordinates in East Africa..."
+              placeholder="Search cities, regions, or coordinates in Africa..."
               className="w-full pl-10 pr-10 py-3 bg-white rounded-lg shadow-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
             />
             {searchQuery && (
@@ -366,7 +395,7 @@ const MapView = ({ onRegionSelect, selectedRegion, loading }) => {
             >
               {isSearching ? (
                 <div className="p-3 text-center text-gray-500 text-sm">
-                  Searching East Africa...
+                  Searching Africa...
                 </div>
               ) : searchResults.length > 0 ? (
                 <div className="py-1">
@@ -392,7 +421,7 @@ const MapView = ({ onRegionSelect, selectedRegion, loading }) => {
                 </div>
               ) : searchQuery.length >= 3 ? (
                 <div className="p-3 text-center text-gray-500 text-sm">
-                  No results found in East Africa
+                  No results found in Africa
                 </div>
               ) : null}
             </motion.div>
@@ -431,21 +460,21 @@ const MapView = ({ onRegionSelect, selectedRegion, loading }) => {
         <div className="text-xs text-gray-500 border-t pt-2">
           <div className="flex items-center space-x-1 mb-1">
             <span className="text-green-600">---</span>
-            <span>East Africa Region</span>
+            <span>Africa Continent</span>
           </div>
-          <div>Covering: Kenya, Tanzania, Uganda, Ethiopia, Rwanda, Burundi</div>
+          <div>Covering: All 54 African countries</div>
         </div>
       </motion.div>
 
       <MapContainer
-        center={EAST_AFRICA_CENTER}
-        zoom={5}
+        center={AFRICA_CENTER}
+        zoom={3}
         style={{ height: '100%', width: '100%' }}
         ref={mapRef}
         className="z-0"
-        maxBounds={EAST_AFRICA_BOUNDS}
+        maxBounds={AFRICA_BOUNDS}
         maxBoundsViscosity={1.0}
-        minZoom={4}
+        minZoom={2}
         maxZoom={18}
       >
         {/* Base tile layer */}
@@ -461,9 +490,9 @@ const MapView = ({ onRegionSelect, selectedRegion, loading }) => {
           opacity={0.6}
         />
 
-        {/* East Africa region outline */}
+        {/* Africa continent outline */}
         <GeoJSON
-          data={EAST_AFRICA_OUTLINE}
+          data={AFRICA_OUTLINE}
           style={{
             fillColor: 'transparent',
             fillOpacity: 0,
@@ -604,7 +633,7 @@ const MapView = ({ onRegionSelect, selectedRegion, loading }) => {
         <MapClickHandler 
           onRegionSelect={onRegionSelect} 
           loading={loading} 
-          isWithinEastAfrica={isWithinEastAfrica}
+          isWithinAfrica={isWithinAfrica}
         />
       </MapContainer>
     </div>

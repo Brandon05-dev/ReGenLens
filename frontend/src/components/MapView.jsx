@@ -400,21 +400,7 @@ const MapView = ({ onRegionSelect, selectedRegion, loading }) => {
         </div>
       </motion.div>
 
-      {/* Map Instructions */}
-      <motion.div 
-        className="absolute top-4 left-4 z-[1000] bg-white rounded-lg shadow-lg p-4 max-w-sm"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-      >
-        <h3 className="font-semibold text-forest-700 mb-2">
-          🗺️ East Africa Analysis
-        </h3>
-        <p className="text-sm text-gray-600">
-          Search for locations or click anywhere on the East Africa map to analyze land degradation 
-          and receive AI-powered restoration recommendations.
-        </p>
-      </motion.div>
+
 
       {/* Legend & Info */}
       <motion.div 

@@ -3,10 +3,8 @@ import { motion } from 'framer-motion';
 import MapView from '../components/MapView';
 import InsightsPanel from '../components/InsightsPanel';
 import Sidebar from '../components/Sidebar';
-import useAuthStore from '../store/authStore';
 
 const DashboardPage = () => {
-  const { user } = useAuthStore();
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [analysisData, setAnalysisData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -24,13 +22,11 @@ const DashboardPage = () => {
       const response = await fetch(`${apiUrl}/api/analyze`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user?.access_token || ''}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           region: regionData.name,
-          coordinates: regionData.coordinates,
-          userId: user?.id
+          coordinates: regionData.coordinates
         })
       });
 
@@ -52,8 +48,7 @@ const DashboardPage = () => {
         degradationScore: 0.25,
         aiSummary: `Vegetation in ${regionData.name} has declined by 25% since 2022 due to soil erosion and climate stress. Recommended actions: 1) Implement contour farming to reduce erosion, 2) Plant drought-tolerant native species, 3) Establish water conservation systems like check dams.`,
         coordinates: regionData.coordinates,
-        createdAt: new Date().toISOString(),
-        userId: user?.id
+        createdAt: new Date().toISOString()
       });
     } finally {
       setLoading(false);
@@ -101,7 +96,7 @@ const DashboardPage = () => {
             
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-500">
-                Welcome, {user?.email?.split('@')[0] || 'User'}
+                Welcome to ReGenLens
               </span>
             </div>
           </div>
@@ -159,7 +154,7 @@ const DashboardPage = () => {
             {selectedRegion ? `Selected: ${selectedRegion.name}` : 'Click on a region to analyze'}
           </span>
           <span className="opacity-75">
-            ReGenLens Dashboard | {user?.email}
+            ReGenLens Dashboard
           </span>
         </div>
       </div>

@@ -1,78 +1,57 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { useUser } from '@clerk/clerk-react';
 import useAuthStore from './store/authStore';
 
 // Pages
 import LandingPage from './pages/LandingPage';
 import WelcomeBackPage from './pages/WelcomeBackPage';
-import LoginPage from './pages/LoginPage';
-import SignUpPage from './pages/SignUpPage';
 import DashboardPage from './pages/DashboardPage';
 import DemoPage from './pages/DemoPage';
 import AboutPage from './pages/AboutPage';
+import ProfilePage from './pages/ProfilePage';
 
 // Components
-import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import OnboardingModal from './components/OnboardingModal';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
-  const { initialize, user, hasVisited, loading } = useAuthStore();
+  const { user, isLoaded } = useUser();
+  const { hasVisited, setUser } = useAuthStore();
   const [showOnboarding, setShowOnboarding] = useState(false);
 
-  // Initialize auth on app start
+  // Sync Clerk user with local store
   useEffect(() => {
-    initialize();
-  }, [initialize]);
-
-  // Show onboarding for new authenticated users
-  useEffect(() => {
-    if (user && !localStorage.getItem('onboarding-completed')) {
-      setShowOnboarding(true);
+    if (isLoaded && user) {
+      setUser(user);
     }
-  }, [user]);
+  }, [user, isLoaded, setUser]);
+
+  // Show onboarding for first-time users on dashboard
+  useEffect(() => {
+    if (!localStorage.getItem('onboarding-completed')) {
+      const currentPath = window.location.pathname;
+      if (currentPath === '/dashboard') {
+        setShowOnboarding(true);
+      }
+    }
+  }, []);
 
   const handleOnboardingComplete = () => {
     setShowOnboarding(false);
     localStorage.setItem('onboarding-completed', 'true');
   };
 
-  // Show loading screen while initializing
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-earth-50 to-forest-50 flex items-center justify-center">
-        <motion.div
-          className="bg-white rounded-2xl shadow-2xl p-8 text-center"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="mb-4">
-            <span className="text-4xl">🌱</span>
-          </div>
-          <div className="flex items-center justify-center space-x-3">
-            <div className="spinner"></div>
-            <span className="text-forest-700 font-medium">
-              Loading ReGenLens...
-            </span>
-          </div>
-        </motion.div>
-      </div>
-    );
-  }
-
   return (
     <Router>
       <div className="min-h-screen">
         <Routes>
-          {/* Home Route - Smart routing based on user state */}
+          {/* Home Route */}
           <Route 
             path="/" 
             element={
-              user ? (
-                <Navigate to="/dashboard" replace />
-              ) : hasVisited ? (
+              hasVisited ? (
                 <WelcomeBackPage />
               ) : (
                 <LandingPage />
@@ -80,39 +59,24 @@ function App() {
             } 
           />
 
-          {/* Authentication Routes */}
-          <Route 
-            path="/login" 
-            element={
-              <ProtectedRoute requireAuth={false}>
-                <LoginPage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/signup" 
-            element={
-              <ProtectedRoute requireAuth={false}>
-                <SignUpPage />
-              </ProtectedRoute>
-            } 
-          />
-
-          {/* Protected Routes */}
-          <Route 
-            path="/dashboard" 
-            element={
-              <ProtectedRoute requireAuth={true}>
-                <DashboardPage />
-              </ProtectedRoute>
-            } 
-          />
+          {/* Dashboard Route - now open to all */}
+          <Route path="/dashboard" element={<DashboardPage />} />
 
           {/* Demo Route */}
           <Route path="/demo" element={<DemoPage />} />
 
           {/* About Page */}
           <Route path="/about" element={<AboutPage />} />
+
+          {/* Profile Page - Protected Route */}
+          <Route 
+            path="/profile" 
+            element={
+              <ProtectedRoute requireAuth={true}>
+                <ProfilePage />
+              </ProtectedRoute>
+            } 
+          />
 
           {/* Catch all - redirect to home */}
           <Route path="*" element={<Navigate to="/" replace />} />

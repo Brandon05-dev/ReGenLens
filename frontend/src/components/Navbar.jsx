@@ -1,98 +1,63 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from '@clerk/clerk-react';
 import useAuthStore from '../store/authStore';
 
 const Navbar = ({ variant = 'default' }) => {
   const navigate = useNavigate();
-  const { user, signOut, isDemo } = useAuthStore();
+  const { isDemo } = useAuthStore();
 
-  const handleSignOut = async () => {
-    await signOut();
-    navigate('/');
-  };
-
-  // Different navbar variants
   const renderNavigation = () => {
-    if (user) {
-      // Authenticated user navbar
-      return (
-        <div className="flex items-center space-x-4">
-          <Link
-            to="/dashboard"
-            className="text-gray-700 hover:text-forest-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-          >
-            Dashboard
-          </Link>
-          <div className="relative group">
-            <button className="flex items-center space-x-1 text-gray-700 hover:text-forest-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
-              <span>{user.email?.split('@')[0] || 'User'}</span>
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
+    return (
+      <div className="flex items-center space-x-4">
+        <Link
+          to="/"
+          className="text-gray-700 hover:text-forest-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+        >
+          Home
+        </Link>
+        <Link
+          to="/dashboard"
+          className="text-gray-700 hover:text-forest-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+        >
+          Dashboard
+        </Link>
+        <Link
+          to="/about"
+          className="text-gray-700 hover:text-forest-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+        >
+          About
+        </Link>
+        {isDemo && (
+          <span className="bg-earth-100 text-earth-800 px-3 py-1 rounded-full text-xs font-medium">
+            Demo Mode
+          </span>
+        )}
+        
+        <SignedOut>
+          <SignInButton>
+            <button className="text-gray-700 hover:text-forest-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+              Sign In
             </button>
-            
-            {/* Dropdown Menu */}
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-              <Link
-                to="/profile"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Profile Settings
-              </Link>
-              <Link
-                to="/dashboard"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                My Analyses
-              </Link>
-              <div className="border-t border-gray-100"></div>
-              <button
-                onClick={handleSignOut}
-                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Sign Out
-              </button>
-            </div>
-          </div>
-        </div>
-      );
-    } else {
-      // Guest user navbar
-      return (
-        <div className="flex items-center space-x-4">
-          <Link
-            to="/"
-            className="text-gray-700 hover:text-forest-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-          >
-            Home
-          </Link>
-          <Link
-            to="/about"
-            className="text-gray-700 hover:text-forest-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-          >
-            About
-          </Link>
-          {isDemo && (
-            <span className="bg-earth-100 text-earth-800 px-3 py-1 rounded-full text-xs font-medium">
-              Demo Mode
-            </span>
-          )}
-          <Link
-            to="/login"
-            className="text-gray-700 hover:text-forest-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-          >
-            Login
-          </Link>
-          <Link
-            to="/signup"
-            className="bg-forest-500 hover:bg-forest-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors shadow-md hover:shadow-lg"
-          >
-            Sign Up
-          </Link>
-        </div>
-      );
-    }
+          </SignInButton>
+          <SignUpButton>
+            <button className="bg-forest-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-forest-700 transition-colors">
+              Sign Up
+            </button>
+          </SignUpButton>
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+      </div>
+    );
   };
 
   return (

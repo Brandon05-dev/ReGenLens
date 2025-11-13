@@ -13,9 +13,9 @@ const LandingPage = () => {
     navigate('/demo');
   };
 
-  const handleSignUp = () => {
+  const handleGetStarted = () => {
     markAsVisited();
-    navigate('/signup');
+    navigate('/dashboard');
   };
 
   return (
@@ -63,17 +63,17 @@ const LandingPage = () => {
               transition={{ duration: 0.8, delay: 0.6 }}
             >
               <button
-                onClick={handleTryDemo}
+                onClick={handleGetStarted}
                 className="bg-forest-500 hover:bg-forest-600 text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
-                🗺️ Try Interactive Demo
+                � Get Started
               </button>
               
               <button
-                onClick={handleSignUp}
+                onClick={handleTryDemo}
                 className="bg-earth-500 hover:bg-earth-600 text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
-                🚀 Sign Up for Full Access
+                �️ Try Interactive Demo
               </button>
             </motion.div>
           </motion.div>
@@ -171,10 +171,10 @@ const LandingPage = () => {
             Ready to Transform Your Land?
           </h2>
           <p className="text-xl text-white/90 mb-8">
-            Join thousands of land managers using ReGenLens to restore ecosystems worldwide.
+            Use ReGenLens to restore ecosystems and monitor land health.
           </p>
           <button
-            onClick={handleSignUp}
+            onClick={handleGetStarted}
             className="bg-white text-forest-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors duration-300 shadow-lg"
           >
             Get Started Today

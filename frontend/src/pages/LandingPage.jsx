@@ -7,12 +7,6 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const { markAsVisited, setDemoMode } = useAuthStore();
 
-  const handleTryDemo = () => {
-    markAsVisited();
-    setDemoMode(true);
-    navigate('/demo');
-  };
-
   const handleGetStarted = () => {
     markAsVisited();
     navigate('/dashboard');
@@ -66,14 +60,14 @@ const LandingPage = () => {
                 onClick={handleGetStarted}
                 className="bg-forest-500 hover:bg-forest-600 text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
-                � Get Started
+                🚀 Get Started
               </button>
               
               <button
-                onClick={handleTryDemo}
+                onClick={handleGetStarted}
                 className="bg-earth-500 hover:bg-earth-600 text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
-                �️ Try Interactive Demo
+                🗺️ Try Interactive Demo
               </button>
             </motion.div>
           </motion.div>

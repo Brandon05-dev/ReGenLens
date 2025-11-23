@@ -75,11 +75,24 @@ const DashboardPageModern = () => {
 
   return (
     <div className="h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex overflow-hidden">
+      {/* Mobile Backdrop */}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <motion.div
+            className="fixed inset-0 bg-black/50 z-20 md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
       {/* Sidebar */}
       <AnimatePresence>
         {sidebarOpen && (
           <motion.aside
-            className="w-80 bg-white shadow-2xl border-r border-gray-200 flex flex-col z-20"
+            className="fixed md:relative w-80 h-full bg-white shadow-2xl border-r border-gray-200 flex flex-col z-30 md:z-20"
             initial={{ x: -320 }}
             animate={{ x: 0 }}
             exit={{ x: -320 }}
@@ -158,33 +171,36 @@ const DashboardPageModern = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Bar */}
-        <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-200 px-6 py-4 z-10">
+        <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-200 px-3 sm:px-6 py-3 sm:py-4 z-10">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4 flex-1 min-w-0">
               {!sidebarOpen && (
                 <button
                   onClick={() => setSidebarOpen(true)}
-                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0"
                 >
-                  <Menu className="w-6 h-6 text-gray-600" />
+                  <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" />
                 </button>
               )}
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-                <p className="text-sm text-gray-500">
-                  {selectedRegion ? `Analyzing: ${selectedRegion.name}` : 'Select a region to begin analysis'}
+              <div className="min-w-0 flex-1">
+                <h1 className="text-lg sm:text-2xl font-bold text-gray-900 truncate">Dashboard</h1>
+                <p className="text-xs sm:text-sm text-gray-500 truncate">
+                  {selectedRegion ? `Analyzing: ${selectedRegion.name}` : 'Select a region'}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
               <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors relative">
-                <Bell className="w-5 h-5 text-gray-600" />
+                <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
               </button>
-              <button className="px-4 py-2 bg-forest-600 text-white rounded-lg hover:bg-forest-700 transition-colors text-sm font-medium flex items-center space-x-2">
+              <button className="hidden sm:flex px-4 py-2 bg-forest-600 text-white rounded-lg hover:bg-forest-700 transition-colors text-sm font-medium items-center space-x-2">
                 <Download className="w-4 h-4" />
                 <span>Export</span>
+              </button>
+              <button className="sm:hidden p-2 bg-forest-600 text-white rounded-lg hover:bg-forest-700 transition-colors">
+                <Download className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -205,10 +221,10 @@ const DashboardPageModern = () => {
           <AnimatePresence>
             {analysisData && (
               <motion.div
-                className="w-[480px] bg-white shadow-2xl border-l border-gray-200 overflow-hidden flex flex-col"
-                initial={{ x: 480 }}
+                className="fixed md:relative w-full md:w-[420px] lg:w-[480px] h-full bg-white shadow-2xl border-l border-gray-200 overflow-hidden flex flex-col z-20"
+                initial={{ x: '100%' }}
                 animate={{ x: 0 }}
-                exit={{ x: 480 }}
+                exit={{ x: '100%' }}
                 transition={{ type: 'spring', damping: 25 }}
               >
                 {/* Panel Header */}

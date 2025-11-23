@@ -261,34 +261,34 @@ const MapView3D = ({ onRegionSelect, selectedRegion, loading }) => {
       {/* Setup Banner for Default Token */}
       {isUsingDefaultToken && (
         <motion.div
-          className="absolute top-20 left-1/2 transform -translate-x-1/2 z-20 max-w-lg"
+          className="absolute top-16 sm:top-20 left-1/2 transform -translate-x-1/2 z-20 max-w-[90%] sm:max-w-md md:max-w-lg mx-auto"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1 }}
         >
-          <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl shadow-2xl p-5">
-            <div className="flex items-start space-x-3">
-              <div className="text-4xl">⚠️</div>
-              <div className="flex-1">
-                <h3 className="font-bold text-xl mb-2">Mapbox Token Required!</h3>
-                <p className="text-sm text-white/90 mb-3">
-                  The default token has expired. Get your FREE Mapbox token to see real-world satellite imagery, 3D terrain, and interactive maps.
+          <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg sm:rounded-xl shadow-2xl p-3 sm:p-5">
+            <div className="flex items-start space-x-2 sm:space-x-3">
+              <div className="text-2xl sm:text-4xl flex-shrink-0">⚠️</div>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-bold text-base sm:text-xl mb-1 sm:mb-2">Mapbox Token Required!</h3>
+                <p className="text-xs sm:text-sm text-white/90 mb-2 sm:mb-3">
+                  Get your FREE token to see real-world satellite imagery and 3D terrain.
                 </p>
-                <div className="bg-white/20 rounded-lg p-3 mb-3 text-sm">
-                  <p className="font-semibold mb-1">Quick Setup (2 minutes):</p>
-                  <ol className="list-decimal list-inside space-y-1 text-white/90">
+                <div className="bg-white/20 rounded-lg p-2 sm:p-3 mb-2 sm:mb-3 text-xs sm:text-sm">
+                  <p className="font-semibold mb-1">Quick Setup (2 min):</p>
+                  <ol className="list-decimal list-inside space-y-0.5 sm:space-y-1 text-white/90 text-[10px] sm:text-xs">
                     <li>Sign up at mapbox.com (free)</li>
                     <li>Copy your access token</li>
                     <li>Add to frontend/.env file</li>
                     <li>Restart dev server</li>
                   </ol>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <a
                     href="https://account.mapbox.com/auth/signup/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block bg-white text-orange-600 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-orange-50 transition-colors"
+                    className="inline-block bg-white text-orange-600 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-orange-50 transition-colors text-center"
                   >
                     Sign Up Free →
                   </a>
@@ -296,7 +296,7 @@ const MapView3D = ({ onRegionSelect, selectedRegion, loading }) => {
                     href="https://account.mapbox.com/access-tokens/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-white/30 transition-colors"
+                    className="inline-block bg-white/20 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-white/30 transition-colors text-center"
                   >
                     Get Token
                   </a>
@@ -308,108 +308,108 @@ const MapView3D = ({ onRegionSelect, selectedRegion, loading }) => {
       )}
 
       {/* Map Controls Overlay */}
-      <div className="absolute top-4 left-4 z-10 space-y-2">
+      <div className="absolute top-2 sm:top-4 left-2 sm:left-4 z-10 space-y-2">
         {/* Map Style Selector */}
         <motion.div
-          className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg p-2"
+          className="bg-white/95 backdrop-blur-sm rounded-lg sm:rounded-xl shadow-lg p-1.5 sm:p-2"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
         >
-          <div className="flex gap-2">
+          <div className="flex gap-1 sm:gap-2">
             <button
               onClick={() => setMapStyle('satellite')}
-              className={`p-2 rounded-lg transition-all ${
+              className={`p-1.5 sm:p-2 rounded-lg transition-all ${
                 mapStyle === 'satellite'
                   ? 'bg-forest-600 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
               title="Satellite View"
             >
-              <Satellite className="w-5 h-5" />
+              <Satellite className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
             <button
               onClick={() => setMapStyle('terrain')}
-              className={`p-2 rounded-lg transition-all ${
+              className={`p-1.5 sm:p-2 rounded-lg transition-all ${
                 mapStyle === 'terrain'
                   ? 'bg-forest-600 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
               title="Terrain View"
             >
-              <Mountain className="w-5 h-5" />
+              <Mountain className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
             <button
               onClick={() => setMapStyle('dark')}
-              className={`p-2 rounded-lg transition-all ${
+              className={`p-1.5 sm:p-2 rounded-lg transition-all ${
                 mapStyle === 'dark'
                   ? 'bg-forest-600 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
               title="Dark Mode"
             >
-              <Layers className="w-5 h-5" />
+              <Layers className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
         </motion.div>
 
         {/* 3D Controls */}
         <motion.div
-          className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg p-3 space-y-2"
+          className="bg-white/95 backdrop-blur-sm rounded-lg sm:rounded-xl shadow-lg p-2 sm:p-3 space-y-1.5 sm:space-y-2"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <label className="flex items-center space-x-2 cursor-pointer">
+          <label className="flex items-center space-x-1.5 sm:space-x-2 cursor-pointer">
             <input
               type="checkbox"
               checked={showTerrain}
               onChange={(e) => setShowTerrain(e.target.checked)}
-              className="w-4 h-4 text-forest-600 rounded focus:ring-forest-500"
+              className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-forest-600 rounded focus:ring-forest-500"
             />
-            <span className="text-sm font-medium text-gray-700">3D Terrain</span>
+            <span className="text-xs sm:text-sm font-medium text-gray-700">3D Terrain</span>
           </label>
-          <label className="flex items-center space-x-2 cursor-pointer">
+          <label className="flex items-center space-x-1.5 sm:space-x-2 cursor-pointer">
             <input
               type="checkbox"
               checked={show3DBuildings}
               onChange={(e) => setShow3DBuildings(e.target.checked)}
-              className="w-4 h-4 text-forest-600 rounded focus:ring-forest-500"
+              className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-forest-600 rounded focus:ring-forest-500"
             />
-            <span className="text-sm font-medium text-gray-700">3D Buildings</span>
+            <span className="text-xs sm:text-sm font-medium text-gray-700">3D Buildings</span>
           </label>
-          <label className="flex items-center space-x-2 cursor-pointer">
+          <label className="flex items-center space-x-1.5 sm:space-x-2 cursor-pointer">
             <input
               type="checkbox"
               checked={autoRotate}
               onChange={(e) => setAutoRotate(e.target.checked)}
-              className="w-4 h-4 text-forest-600 rounded focus:ring-forest-500"
+              className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-forest-600 rounded focus:ring-forest-500"
             />
-            <span className="text-sm font-medium text-gray-700">Auto Rotate</span>
+            <span className="text-xs sm:text-sm font-medium text-gray-700">Auto Rotate</span>
           </label>
         </motion.div>
       </div>
 
       {/* Search Bar */}
       <motion.div
-        className="absolute top-4 right-4 z-10 w-80"
+        className="absolute top-2 sm:top-4 right-2 sm:right-4 z-10 w-48 sm:w-64 md:w-80"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <Search className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search regions in Africa..."
-            className="w-full pl-10 pr-10 py-3 bg-white/95 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-forest-500 text-sm"
+            placeholder="Search regions..."
+            className="w-full pl-8 sm:pl-10 pr-8 sm:pr-10 py-2 sm:py-3 bg-white/95 backdrop-blur-sm rounded-lg sm:rounded-xl shadow-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-forest-500 text-xs sm:text-sm"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           )}
         </div>
@@ -417,24 +417,24 @@ const MapView3D = ({ onRegionSelect, selectedRegion, loading }) => {
 
       {/* Legend */}
       <motion.div
-        className="absolute bottom-4 left-4 z-10 bg-white/95 backdrop-blur-sm rounded-xl shadow-lg p-4"
+        className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 z-10 bg-white/95 backdrop-blur-sm rounded-lg sm:rounded-xl shadow-lg p-2 sm:p-4"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h4 className="font-semibold text-sm mb-3 text-gray-900">Degradation Risk</h4>
-        <div className="space-y-2">
+        <h4 className="font-semibold text-xs sm:text-sm mb-2 sm:mb-3 text-gray-900">Degradation Risk</h4>
+        <div className="space-y-1 sm:space-y-2">
           {[
             { level: 'Low', color: '#22c55e' },
             { level: 'Moderate', color: '#f59e0b' },
             { level: 'High', color: '#ef4444' },
             { level: 'Severe', color: '#991b1b' }
           ].map(({ level, color }) => (
-            <div key={level} className="flex items-center space-x-2">
+            <div key={level} className="flex items-center space-x-1.5 sm:space-x-2">
               <div
-                className="w-4 h-4 rounded-full shadow-sm"
+                className="w-3 h-3 sm:w-4 sm:h-4 rounded-full shadow-sm"
                 style={{ backgroundColor: color }}
               />
-              <span className="text-xs text-gray-700">{level}</span>
+              <span className="text-[10px] sm:text-xs text-gray-700">{level}</span>
             </div>
           ))}
         </div>
@@ -442,26 +442,26 @@ const MapView3D = ({ onRegionSelect, selectedRegion, loading }) => {
 
       {/* Stats Overlay */}
       <motion.div
-        className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10"
+        className="hidden sm:block absolute top-4 left-1/2 transform -translate-x-1/2 z-10"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg px-6 py-3">
-          <div className="flex items-center space-x-6">
+        <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg px-4 sm:px-6 py-2 sm:py-3">
+          <div className="flex items-center space-x-3 sm:space-x-6">
             <div className="text-center">
-              <div className="text-2xl font-bold text-forest-700">{SAMPLE_REGIONS.length}</div>
-              <div className="text-xs text-gray-600">Regions</div>
+              <div className="text-lg sm:text-2xl font-bold text-forest-700">{SAMPLE_REGIONS.length}</div>
+              <div className="text-[10px] sm:text-xs text-gray-600">Regions</div>
             </div>
-            <div className="h-8 w-px bg-gray-300" />
+            <div className="h-6 sm:h-8 w-px bg-gray-300" />
             <div className="text-center">
-              <div className="text-2xl font-bold text-earth-600">54</div>
-              <div className="text-xs text-gray-600">Countries</div>
+              <div className="text-lg sm:text-2xl font-bold text-earth-600">54</div>
+              <div className="text-[10px] sm:text-xs text-gray-600">Countries</div>
             </div>
-            <div className="h-8 w-px bg-gray-300" />
+            <div className="h-6 sm:h-8 w-px bg-gray-300" />
             <div className="text-center">
-              <div className="text-2xl font-bold text-sage-600">30M+</div>
-              <div className="text-xs text-gray-600">km² Monitored</div>
+              <div className="text-lg sm:text-2xl font-bold text-sage-600">30M+</div>
+              <div className="text-[10px] sm:text-xs text-gray-600">km²</div>
             </div>
           </div>
         </div>

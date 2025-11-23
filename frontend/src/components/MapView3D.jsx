@@ -60,15 +60,17 @@ const MapView3D = ({ onRegionSelect, selectedRegion, loading }) => {
     longitude: 20.0,
     latitude: 0.0,
     zoom: 3,
-    pitch: 60,  // Increased for more dramatic 3D effect
+    pitch: 60,  // 3D angle
     bearing: 0
   });
 
   const [mapStyle, setMapStyle] = useState('satellite');
   const [showTerrain, setShowTerrain] = useState(true);
+  const [show3DBuildings, setShow3DBuildings] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [hoveredRegion, setHoveredRegion] = useState(null);
   const [popupInfo, setPopupInfo] = useState(null);
+  const [autoRotate, setAutoRotate] = useState(false);
 
   // Map style options
   const mapStyles = {
@@ -78,32 +80,137 @@ const MapView3D = ({ onRegionSelect, selectedRegion, loading }) => {
     light: 'mapbox://styles/mapbox/light-v11'
   };
 
-  // Initialize 3D terrain when map loads
+  // Initialize 3D terrain and buildings when map loads
   useEffect(() => {
-    if (mapRef.current && showTerrain) {
+    if (mapRef.current) {
       const map = mapRef.current.getMap();
-      map.on('load', () => {
-        map.addSource('mapbox-dem', {
-          type: 'raster-dem',
-          url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
-          tileSize: 512,
-          maxzoom: 14
-        });
-        // Increased exaggeration for more dramatic 3D terrain
-        map.setTerrain({ source: 'mapbox-dem', exaggeration: 2.0 });
-      });
+      
+      const setupMap = () => {
+        // Add 3D terrain
+        if (showTerrain) {
+          if (!map.getSource('mapbox-dem')) {
+            map.addSource('mapbox-dem', {
+              type: 'raster-dem',
+              url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+              tileSize: 512,
+              maxzoom: 14
+            });
+          }
+          map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
+        } else {
+          map.setTerrain(null);
+        }
+
+        // Add 3D buildings
+        if (show3DBuildings) {
+          // Remove existing building layer if present
+          if (map.getLayer('3d-buildings')) {
+            map.removeLayer('3d-buildings');
+          }
+
+          // Add 3D building layer
+          const layers = map.getStyle().layers;
+          const labelLayerId = layers.find(
+            (layer) => layer.type === 'symbol' && layer.layout['text-field']
+          )?.id;
+
+          map.addLayer(
+            {
+              id: '3d-buildings',
+              source: 'composite',
+              'source-layer': 'building',
+              filter: ['==', 'extrude', 'true'],
+              type: 'fill-extrusion',
+              minzoom: 15,
+              paint: {
+                'fill-extrusion-color': '#aaa',
+                'fill-extrusion-height': [
+                  'interpolate',
+                  ['linear'],
+                  ['zoom'],
+                  15,
+                  0,
+                  15.05,
+                  ['get', 'height']
+                ],
+                'fill-extrusion-base': [
+                  'interpolate',
+                  ['linear'],
+                  ['zoom'],
+                  15,
+                  0,
+                  15.05,
+                  ['get', 'min_height']
+                ],
+                'fill-extrusion-opacity': 0.8
+              }
+            },
+            labelLayerId
+          );
+        } else if (map.getLayer('3d-buildings')) {
+          map.removeLayer('3d-buildings');
+        }
+
+        // Add atmospheric sky layer for realism
+        if (!map.getLayer('sky')) {
+          map.addLayer({
+            id: 'sky',
+            type: 'sky',
+            paint: {
+              'sky-type': 'atmosphere',
+              'sky-atmosphere-sun': [0.0, 0.0],
+              'sky-atmosphere-sun-intensity': 15
+            }
+          });
+        }
+      };
+
+      if (map.loaded()) {
+        setupMap();
+      } else {
+        map.on('load', setupMap);
+      }
+
+      return () => {
+        map.off('load', setupMap);
+      };
     }
-  }, [showTerrain]);
+  }, [showTerrain, show3DBuildings]);
+
+  // Auto-rotate map for 3D effect
+  useEffect(() => {
+    if (!autoRotate || !mapRef.current) return;
+
+    const map = mapRef.current.getMap();
+    let animationId;
+
+    const rotateCamera = (timestamp) => {
+      if (autoRotate) {
+        map.rotateTo((map.getBearing() + 0.2) % 360, { duration: 0 });
+        animationId = requestAnimationFrame(rotateCamera);
+      }
+    };
+
+    animationId = requestAnimationFrame(rotateCamera);
+
+    return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+    };
+  }, [autoRotate]);
 
   // Fly to selected region
   useEffect(() => {
     if (selectedRegion && mapRef.current) {
+      setAutoRotate(false); // Stop rotation when selecting a region
       mapRef.current.flyTo({
         center: [selectedRegion.coordinates.lng, selectedRegion.coordinates.lat],
-        zoom: 11,
-        pitch: 65,  // More dramatic angle when zooming to region
-        bearing: 30,  // Slight rotation for better 3D view
-        duration: 2000
+        zoom: 12,
+        pitch: 70,  // Dramatic 3D angle when zooming to region
+        bearing: -20,  // Rotation for better 3D perspective
+        duration: 2500,
+        essential: true
       });
     }
   }, [selectedRegion]);
@@ -202,9 +309,9 @@ const MapView3D = ({ onRegionSelect, selectedRegion, loading }) => {
           </div>
         </motion.div>
 
-        {/* 3D Terrain Toggle */}
+        {/* 3D Controls */}
         <motion.div
-          className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg p-3"
+          className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg p-3 space-y-2"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
@@ -217,6 +324,24 @@ const MapView3D = ({ onRegionSelect, selectedRegion, loading }) => {
               className="w-4 h-4 text-forest-600 rounded focus:ring-forest-500"
             />
             <span className="text-sm font-medium text-gray-700">3D Terrain</span>
+          </label>
+          <label className="flex items-center space-x-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={show3DBuildings}
+              onChange={(e) => setShow3DBuildings(e.target.checked)}
+              className="w-4 h-4 text-forest-600 rounded focus:ring-forest-500"
+            />
+            <span className="text-sm font-medium text-gray-700">3D Buildings</span>
+          </label>
+          <label className="flex items-center space-x-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={autoRotate}
+              onChange={(e) => setAutoRotate(e.target.checked)}
+              className="w-4 h-4 text-forest-600 rounded focus:ring-forest-500"
+            />
+            <span className="text-sm font-medium text-gray-700">Auto Rotate</span>
           </label>
         </motion.div>
       </div>
@@ -307,7 +432,12 @@ const MapView3D = ({ onRegionSelect, selectedRegion, loading }) => {
         mapStyle={mapStyles[mapStyle]}
         mapboxAccessToken={MAPBOX_TOKEN}
         style={{ width: '100%', height: '100%' }}
-        terrain={showTerrain ? { source: 'mapbox-dem', exaggeration: 2.0 } : undefined}
+        terrain={showTerrain ? { source: 'mapbox-dem', exaggeration: 1.5 } : undefined}
+        fog={{
+          range: [0.5, 10],
+          color: 'white',
+          'horizon-blend': 0.1
+        }}
         onClick={(e) => {
           if (!loading && e.features && e.features.length === 0) {
             // Clicked on map, not on a marker

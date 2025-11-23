@@ -10,7 +10,7 @@ const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || 'pk.eyJ1IjoibWFwYm94Ii
 // Check if using default token
 const isUsingDefaultToken = !import.meta.env.VITE_MAPBOX_TOKEN;
 
-// Sample regions with degradation data
+// Real-world regions with degradation data across Africa
 const SAMPLE_REGIONS = [
   {
     id: 1,
@@ -51,6 +51,30 @@ const SAMPLE_REGIONS = [
     degradationLevel: "severe",
     ndvi: 0.22,
     description: "Sahel region with extreme desertification"
+  },
+  {
+    id: 6,
+    name: "Ethiopian Highlands",
+    coordinates: { lat: 9.5, lng: 39.5 },
+    degradationLevel: "moderate",
+    ndvi: 0.50,
+    description: "Highland region with erosion challenges"
+  },
+  {
+    id: 7,
+    name: "Kalahari Desert, Botswana",
+    coordinates: { lat: -24.5, lng: 21.9 },
+    degradationLevel: "high",
+    ndvi: 0.30,
+    description: "Desert region with sparse vegetation"
+  },
+  {
+    id: 8,
+    name: "Lake Chad Basin",
+    coordinates: { lat: 13.0, lng: 14.0 },
+    degradationLevel: "severe",
+    ndvi: 0.20,
+    description: "Shrinking lake affecting regional ecosystem"
   }
 ];
 
@@ -58,9 +82,9 @@ const MapView3D = ({ onRegionSelect, selectedRegion, loading }) => {
   const mapRef = useRef();
   const [viewState, setViewState] = useState({
     longitude: 20.0,
-    latitude: 0.0,
-    zoom: 3,
-    pitch: 60,  // 3D angle
+    latitude: 5.0,
+    zoom: 3.5,
+    pitch: 45,  // 3D angle for better world view
     bearing: 0
   });
 
@@ -237,27 +261,46 @@ const MapView3D = ({ onRegionSelect, selectedRegion, loading }) => {
       {/* Setup Banner for Default Token */}
       {isUsingDefaultToken && (
         <motion.div
-          className="absolute top-20 left-1/2 transform -translate-x-1/2 z-20 max-w-md"
+          className="absolute top-20 left-1/2 transform -translate-x-1/2 z-20 max-w-lg"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1 }}
         >
-          <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl shadow-2xl p-4">
+          <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl shadow-2xl p-5">
             <div className="flex items-start space-x-3">
-              <div className="text-3xl">🗺️</div>
+              <div className="text-4xl">⚠️</div>
               <div className="flex-1">
-                <h3 className="font-bold text-lg mb-1">Get Full 3D Experience!</h3>
-                <p className="text-sm text-blue-100 mb-2">
-                  Add your free Mapbox token for enhanced 3D terrain and satellite imagery.
+                <h3 className="font-bold text-xl mb-2">Mapbox Token Required!</h3>
+                <p className="text-sm text-white/90 mb-3">
+                  The default token has expired. Get your FREE Mapbox token to see real-world satellite imagery, 3D terrain, and interactive maps.
                 </p>
-                <a
-                  href="https://account.mapbox.com/auth/signup/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block bg-white text-blue-600 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-50 transition-colors"
-                >
-                  Get Free Token (2 min) →
-                </a>
+                <div className="bg-white/20 rounded-lg p-3 mb-3 text-sm">
+                  <p className="font-semibold mb-1">Quick Setup (2 minutes):</p>
+                  <ol className="list-decimal list-inside space-y-1 text-white/90">
+                    <li>Sign up at mapbox.com (free)</li>
+                    <li>Copy your access token</li>
+                    <li>Add to frontend/.env file</li>
+                    <li>Restart dev server</li>
+                  </ol>
+                </div>
+                <div className="flex gap-2">
+                  <a
+                    href="https://account.mapbox.com/auth/signup/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block bg-white text-orange-600 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-orange-50 transition-colors"
+                  >
+                    Sign Up Free →
+                  </a>
+                  <a
+                    href="https://account.mapbox.com/access-tokens/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-white/30 transition-colors"
+                  >
+                    Get Token
+                  </a>
+                </div>
               </div>
             </div>
           </div>
